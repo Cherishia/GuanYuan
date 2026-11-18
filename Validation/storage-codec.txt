@@ -1,0 +1,12 @@
+PASS: Local encrypted storage Unicode round trip
+PASS: Each storage write uses a fresh random IV
+PASS: Stored record does not contain plaintext secret
+PASS: Wrong storage key refused
+PASS: Ciphertext cannot be moved to a different preference
+PASS: Modified local ciphertext refused
+PASS: Malformed storage record refused
+PASS: Malformed storage record refused
+PASS: Malformed storage record refused
+PASS: Malformed storage record refused
+PASS: Malformed storage record refused
+JVM codec tests only; physical Android Keystore behavior requires a phone.

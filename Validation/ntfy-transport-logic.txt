@@ -1,0 +1,14 @@
+PASS: Envelope built only after subscription readiness, preserving expiry for slow handshakes
+PASS: Raw request and response complete
+PASS: Selected network factory used for both connections without retry
+PASS: Publish disables caching and Firebase
+PASS: Publish connection closed
+PASS: DNS error identifies mobile-to-service failure before publication
+PASS: TLS failure reported without disabling certificate verification
+PASS: Quota error remains visible and does not automatically retry a command
+PASS: Timeout after publication distinguishes missing PC reply
+PASS: Diagnosis verifies random marker publish and receive independently of PC
+PASS: Diagnosis uses a fresh subscription topic and never requests optional health endpoint
+PASS: Diagnostic marker is published without cache or Firebase
+PASS: Unexpected diagnostic marker is rejected
+Fake HTTP connections test logic only; HTTPS integration has a separate runner.

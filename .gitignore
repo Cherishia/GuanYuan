@@ -1,0 +1,16 @@
+/.env
+.env
+.env.local
+/build/
+/work/
+__pycache__/
+*.py[cod]
+*.apk
+*.idsig
+*.exe
+*.lib
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.dat

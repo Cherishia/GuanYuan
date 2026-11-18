@@ -1,0 +1,11 @@
+PASS: UI regression uses a mock executor and no saved configuration
+PASS: GUI executable has no attached console window
+PASS: Only one application main window exists
+PASS: Unchanged state does not repaint on idle refreshes
+PASS: A new countdown updates the displayed state
+PASS: Changed countdown seconds refresh the display
+PASS: Pairing is closed until the local start button is used
+PASS: Double-buffered frame matches the complete panel image
+PASS: Repeated painting releases temporary GDI resources
+PASS: Hidden panel stops refresh work and releases its controls
+No real power, firewall or startup settings were changed.

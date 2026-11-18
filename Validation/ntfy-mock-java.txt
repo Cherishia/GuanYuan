@@ -1,0 +1,67 @@
+PASS: Java HMAC matches Python and C# reference
+PASS: Java connects to Windows server
+PASS: Java OAEP encrypted pairing accepted by native Windows server
+PASS: Android signed status accepted
+PASS: Android schedules mock shutdown
+PASS: Captured Android request cannot be replayed
+PASS: Android cancels countdown
+PASS: Android schedules mock sleep
+PASS: Android cancels sleep
+PASS: Android schedules mock hibernate
+PASS: Android cancels hibernate
+PASS: Remote configuration synced encrypted over LAN
+PASS: Encrypted configuration cannot be substituted for power response
+PASS: Response bound to requesting client and nonce
+PASS: Java Android AES-GCM request and native response interoperate through relay
+PASS: Response bound to requesting client and nonce
+PASS: Clock skew 8s reproduces expiry rejection and obtains authenticated clock hint
+PASS: Response bound to requesting client and nonce
+PASS: Status succeeds after authenticated clock correction for skew 8s
+PASS: Response bound to requesting client and nonce
+PASS: Response bound to requesting client and nonce
+PASS: Corrected timestamp and expiry allow mock power and cancellation for skew 8s
+PASS: Response bound to requesting client and nonce
+PASS: Clock skew -86400s reproduces expiry rejection and obtains authenticated clock hint
+PASS: Response bound to requesting client and nonce
+PASS: Status succeeds after authenticated clock correction for skew -86400s
+PASS: Response bound to requesting client and nonce
+PASS: Response bound to requesting client and nonce
+PASS: Corrected timestamp and expiry allow mock power and cancellation for skew -86400s
+PASS: Response bound to requesting client and nonce
+PASS: Clock skew 31536000s reproduces expiry rejection and obtains authenticated clock hint
+PASS: Response bound to requesting client and nonce
+PASS: Status succeeds after authenticated clock correction for skew 31536000s
+PASS: Response bound to requesting client and nonce
+PASS: Response bound to requesting client and nonce
+PASS: Corrected timestamp and expiry allow mock power and cancellation for skew 31536000s
+PASS: Response bound to requesting client and nonce
+PASS: Power command with stale boot session refused
+PASS: Response bound to requesting client and nonce
+PASS: Internet power command below 30 seconds refused
+PASS: Response bound to requesting client and nonce
+PASS: Internet arbitrary command refused
+PASS: Response bound to requesting client and nonce
+PASS: Relay schedules mock shutdown
+PASS: Response bound to requesting client and nonce
+PASS: Relay captured command cannot execute twice
+PASS: Response bound to requesting client and nonce
+PASS: Relay cancellation clears countdown
+PASS: Response bound to requesting client and nonce
+PASS: Expired internet command is never scheduled
+PASS: Response bound to requesting client and nonce
+PASS: Altered encrypted internet command rejected
+PASS: Response bound to requesting client and nonce
+PASS: Rejected commands leave power state unchanged
+PASS: Response bound to requesting client and nonce
+PASS: Relay cannot export computer connection credentials
+PASS: Response bound to requesting client and nonce
+PASS: Relay schedules mock sleep
+PASS: Response bound to requesting client and nonce
+PASS: Relay cancels sleep
+PASS: Response bound to requesting client and nonce
+PASS: Relay schedules mock hibernate
+PASS: Response bound to requesting client and nonce
+PASS: Relay cancels hibernate
+No actual shutdown, sleep, or hibernation was performed.
+PASS: HTTPS diagnostic subscribe/publish/receive works with health endpoint absent (HTTP 404)
+PASS: ntfy raw stream; Cache:no and Firebase:no applied to every message

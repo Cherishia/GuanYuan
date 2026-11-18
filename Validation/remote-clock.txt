@@ -1,0 +1,15 @@
+PASS: Uncalibrated status can bootstrap using local time
+PASS: Authenticated peer time corrects a phone clock years ahead
+PASS: Phone wall-clock changes do not affect calibrated request time
+PASS: Old peer clock sample requires a fresh status before power
+PASS: Monotonic clock moving backwards invalidates the sample
+PASS: An older concurrent response cannot replace a newer sample
+PASS: Excessive round trip cannot establish a misleading clock sample
+PASS: Negative timing sample rejected
+PASS: Invalid or overflowing peer time rejected
+PASS: Authenticated expiry rejection permits one status retry
+PASS: Repeated or unauthenticated clock retry refused
+PASS: Clock correction never automatically retries shutdown
+PASS: Clock correction never automatically retries sleep
+PASS: Clock correction never automatically retries hibernate
+PASS: Clock correction never automatically retries cancel

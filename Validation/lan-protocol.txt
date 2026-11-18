@@ -1,0 +1,36 @@
+PASS: Server is explicitly in simulation mode
+PASS: Native information endpoint
+PASS: UDP automatic discovery round trip
+PASS: Unpaired command rejected
+PASS: Unknown route rejected
+PASS: Legacy pairing protocol refused
+PASS: Substituted computer fingerprint refused even with correct PIN
+PASS: Invalid pairing PIN rejected
+PASS: Independent Python OAEP pairing accepted
+PASS: HMAC status accepted
+PASS: Forged command rejected
+PASS: Expired timestamp rejected
+PASS: Future timestamp rejected
+PASS: Replay rejected
+PASS: shutdown starts countdown
+PASS: shutdown blocks overlapping commands
+PASS: shutdown can be cancelled
+PASS: sleep starts countdown
+PASS: sleep blocks overlapping commands
+PASS: sleep can be cancelled
+PASS: hibernate starts countdown
+PASS: hibernate blocks overlapping commands
+PASS: hibernate can be cancelled
+PASS: Arbitrary system commands are not supported
+PASS: Countdown limits enforced over network
+PASS: Non-JSON content type rejected
+PASS: Oversized payload rejected
+PASS: Duplicate HTTP framing rejected
+PASS: Chunked framing rejected
+PASS: Invalid UTF-8 request rejected
+PASS: Real timer armed with mock executor
+PASS: Timer executes mock action once at deadline
+PASS: 100 authenticated requests remain functional
+PASS: Successful pairing closes pairing window
+PASS: PIN brute-force rate limiting
+No real power operation, firewall rule, or startup registration was changed.

@@ -1,0 +1,58 @@
+{
+  "logicalProcessors": 16,
+  "method": "Windows GetProcessMemoryInfo working set + PrivateUsage; GetProcessTimes; no working-set trimming; mock power executor; GUI hidden in native tray mode; relay is localhost HTTP simulation, excludes HTTPS TLS and cloud latency; external relay process is not part of PC client measurement.",
+  "v1_3_tray": {
+    "idle": {
+      "seconds": 12.009,
+      "samples": 24,
+      "workingSetMiB": 8.852,
+      "privateCommitMiB": 1.625,
+      "cpuOneCorePercent": 0.0,
+      "cpuWholeMachinePercent": 0.0
+    },
+    "phone_status_every_2s": {
+      "seconds": 12.272,
+      "samples": 24,
+      "workingSetMiB": 8.861,
+      "privateCommitMiB": 1.625,
+      "cpuOneCorePercent": 0.0,
+      "cpuWholeMachinePercent": 0.0
+    }
+  },
+  "v1_3_after_panel": {
+    "idle": {
+      "seconds": 12.009,
+      "samples": 24,
+      "workingSetMiB": 10.512,
+      "privateCommitMiB": 1.938,
+      "cpuOneCorePercent": 0.0,
+      "cpuWholeMachinePercent": 0.0
+    },
+    "phone_status_every_2s": {
+      "seconds": 12.272,
+      "samples": 24,
+      "workingSetMiB": 10.518,
+      "privateCommitMiB": 1.938,
+      "cpuOneCorePercent": 0.0,
+      "cpuWholeMachinePercent": 0.0
+    }
+  },
+  "v1_3_relay_http": {
+    "idle": {
+      "seconds": 12.009,
+      "samples": 24,
+      "workingSetMiB": 11.215,
+      "privateCommitMiB": 2.281,
+      "cpuOneCorePercent": 0.0,
+      "cpuWholeMachinePercent": 0.0
+    },
+    "phone_status_every_2s": {
+      "seconds": 12.272,
+      "samples": 24,
+      "workingSetMiB": 11.225,
+      "privateCommitMiB": 2.288,
+      "cpuOneCorePercent": 0.0,
+      "cpuWholeMachinePercent": 0.0
+    }
+  }
+}

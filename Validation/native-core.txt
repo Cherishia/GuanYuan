@@ -1,0 +1,37 @@
+PASS: All tests are wired to a mock power executor
+PASS: Base64 matches reference encoding
+PASS: Base64 decode round trip
+PASS: Native HMAC matches Java, C# and Python reference
+PASS: JSON Unicode and surrogate decoding
+PASS: Duplicate JSON keys rejected
+PASS: Ambiguous command numbers rejected
+PASS: Invalid Unicode rejected
+PASS: Unsupported power actions rejected
+PASS: Countdown bounds enforced
+PASS: Overlapping power actions rejected
+PASS: Cancellation clears pending action
+PASS: Cancelled action never executes
+PASS: No early execution
+PASS: Mock power action executes only once
+PASS: Mock hibernation follows the same countdown path
+PASS: Startup command quotes paths and starts silently
+PASS: Loopback test transport allowed
+PASS: Native DPAPI protected configuration persists
+PASS: Stored pairing key is not plaintext
+PASS: RSA 2048 pairing public key exported
+PASS: Native AES-256-GCM round trip
+PASS: Encryption binds message direction
+PASS: Modified ciphertext rejected
+PASS: Production relay requires HTTPS even on loopback
+PASS: Relay credentials in URL rejected
+PASS: Remote connection settings survive protected persistence
+PASS: Stored relay access key is not plaintext
+PASS: Legacy unverified pairing cannot control computer
+PASS: Verified pairing accepted
+PASS: Legacy remote payload refused
+PASS: Wrong boot session refused
+PASS: Internet power countdown below 30 seconds refused
+PASS: Current session can schedule mock action
+PASS: Captured command refused after simulated reboot even with cleared nonce cache
+PASS: Clearing pairing revokes clients, closes pairing and rotates ntfy route
+No actual power operation or Windows startup setting was changed.
