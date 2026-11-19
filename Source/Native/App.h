@@ -38,6 +38,7 @@ extern HWND mainWindow;
 extern HINSTANCE instance;
 extern std::atomic<bool> listening;
 extern int boundPort;
+extern int boundDiscoveryPort;
 constexpr UINT WM_UPDATE=WM_APP+10,WM_TRAY=WM_APP+11;
 std::wstring Wide(const std::string& s);
 std::string Utf8(const std::wstring& s);

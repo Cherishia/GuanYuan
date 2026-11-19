@@ -1,11 +1,23 @@
 PASS: UI regression uses a mock executor and no saved configuration
 PASS: GUI executable has no attached console window
+PASS: Only the current build may reopen through the single-instance message
+PASS: Custom title bar fits in the original client area
+PASS: Only the title text area drags the window
+PASS: Caption buttons have larger click targets
 PASS: Only one application main window exists
 PASS: Unchanged state does not repaint on idle refreshes
 PASS: A new countdown updates the displayed state
 PASS: Changed countdown seconds refresh the display
 PASS: Pairing is closed until the local start button is used
+PASS: Rounded pairing button still opens the pairing window
 PASS: Double-buffered frame matches the complete panel image
-PASS: Repeated painting releases temporary GDI resources
-PASS: Hidden panel stops refresh work and releases its controls
-No real power, firewall or startup settings were changed.
+PASS: Unchanged frames reuse their bitmap without acquiring drawing resources
+PASS: Power state changes invalidate the rendered background
+PASS: Repainting a countdown replaces the cached background
+PASS: Painted pill corners are smooth and symmetric at 100% DPI
+PASS: Painted pill corners are smooth and symmetric at 150% DPI
+PASS: Mouse input hides the keyboard focus indicator
+PASS: A mouse-focused button renders without a focus rectangle
+PASS: Keyboard focus uses a rounded outline
+PASS: New close button hides to tray, stops refresh and releases controls and drawing buffer
+PASS: New minimize button hides to tray without exiting

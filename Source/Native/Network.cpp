@@ -5,6 +5,7 @@
 
 std::atomic<bool> listening{false};
 int boundPort=18677;
+int boundDiscoveryPort=0;
 static SOCKET server=INVALID_SOCKET,discoverySocket=INVALID_SOCKET;
 static HANDLE acceptThread=nullptr,discoveryThread=nullptr;
 static SRWLOCK networkLock=SRWLOCK_INIT,workersLock=SRWLOCK_INIT;
@@ -72,12 +73,28 @@ bool StartService(bool loopback,int port,bool discovery){
     sockaddr_in address{};address.sin_family=AF_INET;address.sin_addr.s_addr=htonl(loopback?INADDR_LOOPBACK:INADDR_ANY);address.sin_port=htons((u_short)port);
     if(bind(server,(sockaddr*)&address,sizeof(address))||listen(server,8)){closesocket(server);server=INVALID_SOCKET;return false;}
     int n=sizeof(address);getsockname(server,(sockaddr*)&address,&n);boundPort=ntohs(address.sin_port);
-    if(discovery){discoverySocket=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);address.sin_port=htons(18678);setsockopt(discoverySocket,SOL_SOCKET,SO_EXCLUSIVEADDRUSE,(char*)&exclusive,sizeof(exclusive));if(discoverySocket==INVALID_SOCKET||bind(discoverySocket,(sockaddr*)&address,sizeof(address))){closesocket(server);if(discoverySocket!=INVALID_SOCKET)closesocket(discoverySocket);server=discoverySocket=INVALID_SOCKET;return false;}}
+    if(discovery){
+        discoverySocket=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+        // Exercise actual discovery in loopback tests without taking the live app's port.
+        address.sin_port=htons(loopback?0:18678);
+        n=sizeof(address);
+        if(discoverySocket==INVALID_SOCKET||
+           setsockopt(discoverySocket,SOL_SOCKET,SO_EXCLUSIVEADDRUSE,(char*)&exclusive,sizeof(exclusive))||
+           bind(discoverySocket,(sockaddr*)&address,sizeof(address))||
+           getsockname(discoverySocket,(sockaddr*)&address,&n)){
+            closesocket(server);
+            if(discoverySocket!=INVALID_SOCKET)closesocket(discoverySocket);
+            server=discoverySocket=INVALID_SOCKET;
+            return false;
+        }
+        boundDiscoveryPort=ntohs(address.sin_port);
+    }
     if(!workersDone)workersDone=CreateEventW(nullptr,TRUE,TRUE,nullptr);listening=true;acceptThread=CreateThread(nullptr,128*1024,AcceptLoop,nullptr,STACK_SIZE_PARAM_IS_A_RESERVATION,nullptr);if(discovery)discoveryThread=CreateThread(nullptr,128*1024,DiscoveryLoop,nullptr,STACK_SIZE_PARAM_IS_A_RESERVATION,nullptr);
     if(!acceptThread||(discovery&&!discoveryThread)){StopService();return false;}StartRelay();NotifyUi();return true;
 }
 void StopService(){
     listening=false;StopRelay();if(server!=INVALID_SOCKET){shutdown(server,SD_BOTH);closesocket(server);server=INVALID_SOCKET;}if(discoverySocket!=INVALID_SOCKET){closesocket(discoverySocket);discoverySocket=INVALID_SOCKET;}
+    boundDiscoveryPort=0;
     if(acceptThread){WaitForSingleObject(acceptThread,3000);CloseHandle(acceptThread);acceptThread=nullptr;}if(discoveryThread){WaitForSingleObject(discoveryThread,3000);CloseHandle(discoveryThread);discoveryThread=nullptr;}
     {Exclusive lock(workersLock);for(auto socket:workers)shutdown(socket,SD_BOTH);}if(workersDone)WaitForSingleObject(workersDone,3000);
     try{CancelPower();}catch(...){}NotifyUi();

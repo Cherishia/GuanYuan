@@ -3,10 +3,12 @@ package local.palmpower.remote;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.net.ConnectivityManager;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
@@ -50,7 +52,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends Activity {
-    private static final int BG=0xfffbf4ef, CARD=0xffffffff, INK=0xff4b2c31, MUTED=0xff957177, ACCENT=0xffb72b38;
+    private static final int BG=0xfffaf6f5, CARD=0xffffffff, INK=0xff2d2326, MUTED=0xff69575c;
+    private static final int ACCENT=0xffa62539, TONAL=0xfff7e6e9, DISABLED=0xfff1eceb, DISABLED_INK=0xff776970;
     private final Handler main=new Handler(Looper.getMainLooper());
     private final ExecutorService io=Executors.newFixedThreadPool(3);
     private final LinkedHashMap<String,Device> devices=new LinkedHashMap<>();
@@ -118,31 +121,95 @@ public class MainActivity extends Activity {
     private void addText(LinearLayout parent,String value,int size,int color,boolean bold,int top) {
         TextView t=text(value,size,color,bold); LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-1,-2); p.topMargin=dp(top); parent.addView(t,p);
     }
+    private Button actionButton(String title,boolean primary,View.OnClickListener click) {
+        int[][] states={{-android.R.attr.state_enabled},{}};
+        StateListDrawable fill=new StateListDrawable();
+        fill.addState(states[0],shape(DISABLED,28));
+        fill.addState(states[1],shape(primary?ACCENT:TONAL,28));
+
+        Button button=new Button(this);
+        button.setText(title);
+        button.setTextSize(14);
+        button.setAllCaps(false);
+        button.setTypeface(Typeface.create("sans-serif-medium",Typeface.NORMAL));
+        button.setTextColor(new ColorStateList(states,new int[]{DISABLED_INK,primary?CARD:ACCENT}));
+        button.setBackgroundTintList(null);
+        button.setBackground(new RippleDrawable(ColorStateList.valueOf(primary?0x33ffffff:0x22a62539),fill,shape(Color.WHITE,28)));
+        button.setStateListAnimator(null);
+        button.setElevation(0);
+        button.setMinimumHeight(dp(48));
+        button.setPadding(dp(16),dp(10),dp(16),dp(10));
+        button.setOnClickListener(click);
+        return button;
+    }
     private Button button(LinearLayout parent,String title,boolean primary,View.OnClickListener click) {
-        Button b=new Button(this); b.setText(title); b.setTextSize(15); b.setAllCaps(false);
-        b.setTextColor(primary?BG:INK); b.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
-        b.setBackground(shape(primary?ACCENT:0xfff6e2e1,14)); b.setElevation(0); b.setOnClickListener(click);
-        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-1,dp(54)); p.topMargin=dp(12); parent.addView(b,p); return b;
+        Button button=actionButton(title,primary,click);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);
+        params.topMargin=dp(8);
+        parent.addView(button,params);
+        return button;
     }
     private LinearLayout card() {
-        LinearLayout box=column(); box.setPadding(dp(20),dp(18),dp(20),dp(20)); box.setBackground(shape(CARD,20));
-        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-1,-2); p.topMargin=dp(18); page.addView(box,p); return box;
+        LinearLayout box=column();
+        box.setPadding(dp(16),dp(16),dp(16),dp(16));
+        box.setBackground(shape(CARD,24));
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);
+        params.topMargin=dp(12);
+        page.addView(box,params);
+        return box;
     }
-    private void base(String title,String subtitle) {
-        ScrollView scroll=new ScrollView(this); scroll.setFillViewport(true); scroll.setBackgroundColor(BG);
-        scroll.setFitsSystemWindows(true);
-        page=column(); page.setPadding(dp(24),dp(28),dp(24),dp(28)); scroll.addView(page); setContentView(scroll);
-        addText(page,"关源  /  ANDROID · 1.3.4",11,ACCENT,true,0);
-        addText(page,title,32,INK,true,18); addText(page,subtitle,14,MUTED,false,8);
+    private void base(boolean controlPage) {
+        LinearLayout root=column();
+        root.setBackgroundColor(BG);
+        root.setFitsSystemWindows(true);
+
+        LinearLayout toolbar=new LinearLayout(this);
+        toolbar.setGravity(Gravity.CENTER_VERTICAL);
+        toolbar.setMinimumHeight(dp(56));
+        toolbar.setPadding(dp(controlPage?4:20),0,dp(20),0);
+        if(controlPage){
+            Button back=actionButton("‹",false,v->back());
+            back.setTextSize(29);
+            back.setContentDescription("返回电脑列表");
+            back.setPadding(0,0,0,0);
+            back.setMinWidth(dp(48));
+            back.setMinimumWidth(dp(48));
+            back.setBackground(new RippleDrawable(ColorStateList.valueOf(0x22a62539),null,shape(Color.WHITE,24)));
+            LinearLayout.LayoutParams backParams=new LinearLayout.LayoutParams(dp(48),dp(48));
+            backParams.setMarginEnd(dp(8));
+            toolbar.addView(back,backParams);
+        }
+        TextView title=text(controlPage?"电脑控制":"关源",22,INK,true);
+        if(Build.VERSION.SDK_INT>=28)title.setAccessibilityHeading(true);
+        toolbar.addView(title,new LinearLayout.LayoutParams(0,-2,1));
+        root.addView(toolbar,new LinearLayout.LayoutParams(-1,-2));
+
+        ScrollView scroll=new ScrollView(this);
+        scroll.setFillViewport(true);
+        page=column();
+        page.setPadding(dp(16),dp(4),dp(16),dp(24));
+        scroll.addView(page,new ScrollView.LayoutParams(-1,-2));
+        root.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
+        setContentView(root);
     }
     private void renderHome() {
-        base("让电脑，休息一下。","同一 Wi-Fi 自动发现，流量可连接已保存的电脑。");
-        LinearLayout intro=card(); addText(intro,"你的电脑",18,INK,true,0);
+        base(false);
+        LinearLayout intro=card(); addText(intro,"查找电脑",18,INK,true,0);
         searchNote=text(scanning.get()?"正在搜索附近的电脑…":"自动发现局域网中的电脑",13,MUTED,false);
         LinearLayout.LayoutParams hint=new LinearLayout.LayoutParams(-1,-2); hint.topMargin=dp(8); intro.addView(searchNote,hint);
+        LinearLayout discoveryActions=new LinearLayout(this);
+        LinearLayout.LayoutParams actionGroup=new LinearLayout.LayoutParams(-1,-2);
+        actionGroup.topMargin=dp(12);
+        intro.addView(discoveryActions,actionGroup);
+        Button rescan=actionButton(scanning.get()?"正在搜索…":"重新搜索",true,v->scan());
+        rescan.setEnabled(!scanning.get());
+        LinearLayout.LayoutParams scanWidth=new LinearLayout.LayoutParams(0,-1,1);
+        scanWidth.setMarginEnd(dp(8));
+        discoveryActions.addView(rescan,scanWidth);
+        discoveryActions.addView(actionButton("手动输入 IP",false,v->manual()),new LinearLayout.LayoutParams(0,-1,1));
         for(Device device:devices.values()) {
             LinearLayout box=card();
-            addText(box,"●  "+device.name,19,INK,true,0);
+            addText(box,device.name,18,INK,true,0);
             addText(box,device.ip+"  ·  "+(paired(device)?"已配对":"首次连接需要配对"),12,MUTED,false,8);
             button(box,paired(device)?"连接电脑":"连接并配对",true,v->connect(device));
         }
@@ -155,12 +222,10 @@ public class MainActivity extends Activity {
                 LinearLayout box=card();addText(box,d.name,19,INK,true,0);addText(box,"已保存的远程入口 · Wi-Fi / 流量均可连接",12,MUTED,false,8);button(box,"通过网络连接",true,v->connect(d));
             }catch(Exception ignored){}
         }
-        button(page,scanning.get()?"正在搜索…":"重新搜索",false,v->scan());
-        button(page,"手动输入电脑 IP",false,v->manual());
-        addText(page,"首次使用",15,INK,true,28);
-        addText(page,"1. 在电脑运行 GuanYuan.exe\n2. 点击电脑端的「允许局域网连接」和「开始配对」\n3. 核对两端身份指纹，再输入 6 位配对码",13,MUTED,false,10);
-        addText(page,"流量控制：先在电脑端完成「跨网络设置」，然后用同一 Wi-Fi 连接一次，本机会自动保存远程入口。",12,MUTED,false,22);
-        addText(page,"电脑需保持开机并运行小程序。睡眠、休眠或关机后，App 无法将它唤醒。",12,MUTED,false,12);
+        LinearLayout help=card();
+        addText(help,"首次使用",15,INK,true,0);
+        addText(help,"在电脑运行关源，允许局域网连接并点「开始配对」。手机上核对身份指纹，再输入配对码。",13,MUTED,false,8);
+        addText(help,"使用手机流量前，请先在电脑开启跨网络，再用同一 Wi-Fi 连接一次。",13,MUTED,false,8);
     }
     private Network wifi() throws Exception {
         ConnectivityManager cm=(ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
@@ -287,32 +352,48 @@ public class MainActivity extends Activity {
         if(selected==null)return;
         Device d=selected;
         d.connected=false;powerButtons.clear();
-        base(d.name,(d.remote?"跨网络加密连接":"局域网  ·  "+d.ip)+(d.simulated?"  ·  模拟模式":""));
-        Button back=button(page,"‹  返回电脑列表",false,v->back());
-        LinearLayout status=card();addText(status,"电脑状态",12,MUTED,true,0);
-        stateText=text(paired(d)?"正在获取状态…":"请先完成配对",18,INK,true);
-        LinearLayout.LayoutParams sp=new LinearLayout.LayoutParams(-1,-2);sp.topMargin=dp(12);status.addView(stateText,sp);
-        timeText=text("—",44,ACCENT,true);status.addView(timeText);
-        connectionDetail=text("",12,MUTED,false);LinearLayout.LayoutParams detail=new LinearLayout.LayoutParams(-1,-2);detail.topMargin=dp(10);status.addView(connectionDetail,detail);
+        base(true);
+        LinearLayout status=card();
+        addText(status,d.name,22,INK,true,0);
+        addText(status,(d.remote?"跨网络加密连接":"局域网 · "+d.ip)+(d.simulated?" · 模拟模式":""),13,MUTED,false,4);
+        LinearLayout statusPanel=column();
+        statusPanel.setBackground(shape(BG,18));
+        statusPanel.setPadding(dp(14),dp(12),dp(14),dp(12));
+        LinearLayout.LayoutParams statusParams=new LinearLayout.LayoutParams(-1,-2);
+        statusParams.topMargin=dp(12);
+        status.addView(statusPanel,statusParams);
+        stateText=text(paired(d)?"正在获取状态…":"请先完成配对",15,INK,true);
+        statusPanel.addView(stateText);
+        timeText=text("—",26,ACCENT,true);
+        statusPanel.addView(timeText);
+        connectionDetail=text("",13,MUTED,false);
+        statusPanel.addView(connectionDetail);
         cancelButton=button(status,"取消倒计时",false,v->send("cancel",0));cancelButton.setVisibility(View.GONE);
-        if(d.simulated)addText(page,"模拟模式：所有操作只演练流程，不会改变电脑电源状态。",12,ACCENT,false,18);
+        if(d.simulated)addText(status,"当前操作只用于演练。",13,ACCENT,false,8);
         boolean paired=paired(d)&&!authFailed;
-        if(!paired){if(d.remote)button(page,"返回列表，在同一 Wi-Fi 重新配对",true,v->back());else button(page,"输入配对码",true,v->{prefs.edit().remove("key_"+d.id).apply();connect(d);});}
-        powerButtons.add(button(page,"关机",true,v->confirm("shutdown")));
-        powerButtons.add(button(page,d.sleep?"睡眠 · 快速恢复":"睡眠 · 电脑当前不支持",false,v->confirm("sleep")));
-        powerButtons.add(button(page,d.hibernate?"休眠 · 保存状态后断电":"休眠 · Windows 尚未启用",false,v->confirm("hibernate")));
+        if(!paired){if(d.remote)button(status,"返回列表，在同一 Wi-Fi 重新配对",true,v->back());else button(status,"输入配对码",true,v->{prefs.edit().remove("key_"+d.id).apply();connect(d);});}
+
+        LinearLayout power=card();
+        addText(power,"电源操作",16,INK,true,0);
+        powerButtons.add(button(power,"关机",true,v->confirm("shutdown")));
+        powerButtons.add(button(power,d.sleep?"睡眠 · 快速恢复":"睡眠 · 电脑当前不支持",false,v->confirm("sleep")));
+        powerButtons.add(button(power,d.hibernate?"休眠 · 保存状态后断电":"休眠 · Windows 尚未启用",false,v->confirm("hibernate")));
         setConnectionReady(false);
-        button(page,"重新连接（只查询状态）",false,v->poll());
-        if(d.remote&&"ntfy".equals(d.relayMode))button(page,"检测手机网络",false,v->diagnose(d));
-        addText(page,"每次操作会留出 30 秒倒计时，可在手机或电脑端取消。关机前请保存文件，未保存的程序可能阻止关机。",12,MUTED,false,22);
-        addText(page,"睡眠和休眠取决于电脑硬件及 Windows 设置。本 App 不提供远程开机或唤醒。",12,MUTED,false,14);
-        if(d.remote)button(page,"移除此远程入口",false,v->{prefs.edit().remove("remote_"+d.id).apply();back();});
-        if(d.remote&&"ntfy".equals(d.relayMode))addText(page,"免服务器模式依赖公共服务。状态约每 30 秒刷新；请操作后关闭页面，减少配额消耗。",12,MUTED,false,14);
+        addText(power,"操作开始后有 30 秒倒计时，两端均可取消。关机前请保存文件。",13,MUTED,false,12);
+
+        LinearLayout connection=card();
+        addText(connection,"连接管理",16,INK,true,0);
+        button(connection,"重新连接（查询状态）",false,v->poll());
+        if(d.remote&&"ntfy".equals(d.relayMode)){
+            button(connection,"检测手机网络",false,v->diagnose(d));
+            addText(connection,"公共中转约每 30 秒更新状态。用完可返回列表，减少配额消耗。",13,MUTED,false,8);
+        }
+        if(d.remote)button(connection,"移除此远程入口",false,v->{prefs.edit().remove("remote_"+d.id).apply();back();});
     }
     private String label(String action){return "shutdown".equals(action)?"关机":"sleep".equals(action)?"睡眠":"休眠";}
     private void setConnectionReady(boolean ready){
         if(selected==null)return;selected.connected=ready;
-        for(int i=0;i<powerButtons.size();i++){boolean enabled=ready&&!authFailed&&paired(selected)&&(i==0||i==1&&selected.sleep||i==2&&selected.hibernate);Button b=powerButtons.get(i);b.setEnabled(enabled);b.setAlpha(enabled?1f:.45f);}
+        for(int i=0;i<powerButtons.size();i++){boolean enabled=ready&&!authFailed&&paired(selected)&&(i==0||i==1&&selected.sleep||i==2&&selected.hibernate);powerButtons.get(i).setEnabled(enabled);}
     }
     private void confirm(String action) {
         if(commandBusy||selected==null||!selected.connected)return;

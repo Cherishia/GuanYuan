@@ -62,4 +62,3 @@ PASS: Response bound to requesting client and nonce
 PASS: Relay schedules mock hibernate
 PASS: Response bound to requesting client and nonce
 PASS: Relay cancels hibernate
-No actual shutdown, sleep, or hibernation was performed.

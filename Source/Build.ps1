@@ -26,7 +26,7 @@ try {
     Run-Tool $compiler @('rc','/fo',$resource,'app.rc')
 } finally { Pop-Location }
 $sources = @(Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'Native') -Filter '*.cpp' | ForEach-Object FullName)
-Run-Tool $compiler (@('c++','-std=c++17','-O2','-s','-fno-rtti','-Wno-unused-command-line-argument','-municode','-Wl,--subsystem,windows','-DUNICODE','-D_UNICODE','-D_WIN32_WINNT=0x0a00','-DWIN32_LEAN_AND_MEAN','-DNOMINMAX','-o',$exe)+$sources+@($resource,'-lws2_32','-lbcrypt','-lcrypt32','-ladvapi32','-lshell32','-liphlpapi','-lpowrprof','-lgdi32','-luser32','-lcomctl32','-luuid','-lwinhttp'))
+Run-Tool $compiler (@('c++','-std=c++17','-O2','-s','-fno-rtti','-Wno-unused-command-line-argument','-municode','-Wl,--subsystem,windows','-DUNICODE','-D_UNICODE','-D_WIN32_WINNT=0x0a00','-DWIN32_LEAN_AND_MEAN','-DNOMINMAX','-o',$exe)+$sources+@($resource,'-lws2_32','-lbcrypt','-lcrypt32','-ladvapi32','-lshell32','-liphlpapi','-lpowrprof','-lgdi32','-luser32','-lcomctl32','-luuid','-lwinhttp','-ldwmapi'))
 # Check the linked PE rather than relying on a driver flag being honoured.
 $peBytes = [System.IO.File]::ReadAllBytes($exe)
 $peOffset = [BitConverter]::ToInt32($peBytes,60)

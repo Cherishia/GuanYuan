@@ -34,4 +34,3 @@ PASS: Internet power countdown below 30 seconds refused
 PASS: Current session can schedule mock action
 PASS: Captured command refused after simulated reboot even with cleared nonce cache
 PASS: Clearing pairing revokes clients, closes pairing and rotates ntfy route
-No actual power operation or Windows startup setting was changed.

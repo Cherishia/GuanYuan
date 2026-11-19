@@ -62,6 +62,5 @@ PASS: Response bound to requesting client and nonce
 PASS: Relay schedules mock hibernate
 PASS: Response bound to requesting client and nonce
 PASS: Relay cancels hibernate
-No actual shutdown, sleep, or hibernation was performed.
 PASS: HTTPS diagnostic subscribe/publish/receive works with health endpoint absent (HTTP 404)
 PASS: ntfy raw stream; Cache:no and Firebase:no applied to every message

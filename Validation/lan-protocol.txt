@@ -33,4 +33,3 @@ PASS: Timer executes mock action once at deadline
 PASS: 100 authenticated requests remain functional
 PASS: Successful pairing closes pairing window
 PASS: PIN brute-force rate limiting
-No real power operation, firewall rule, or startup registration was changed.

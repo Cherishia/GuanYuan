@@ -1,6 +1,4 @@
-v1.3.4 changes icon assets, resource/version metadata and Android header version text only.
-Source comparison confirms all functional C++ and Java code matches v1.3.3.
-Icon formats, adaptive launcher masks, GUI executable build, APK label and signing continuity were checked.
-Functional reports are inherited from v1.3.3 and earlier unchanged modules; they were not rerun for this visual-only update.
-No real power, firewall or startup operations were performed.
-Actual Android launcher appearance depends on launcher/theme; masks were rendered locally, not on a physical phone.
+Windows v1.3.9 / Android v1.3.7
+
+The release build passed 23 UI checks, 36 native core checks, 35 LAN checks, 66 ntfy mock checks and 64 private relay checks. Window controls, mouse and keyboard focus, and rounded corners at 100% and 150% scaling are covered by the UI suite.
+LAN discovery runs on an assigned loopback port so the live app can remain open. Power actions in all these tests use simulation. Real cellular-to-home-Wi-Fi power operations and Android Keystore on a physical phone are outside this test run. The remaining reports describe earlier tests of unchanged components.

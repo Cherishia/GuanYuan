@@ -112,7 +112,7 @@ def main():
         check(server.http('/info')[0] == 200, 'Native information endpoint')
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp:
             udp.settimeout(3)
-            udp.sendto(b'PALM_POWER_DISCOVER_V1!', ('127.0.0.1', 18678))
+            udp.sendto(b'PALM_POWER_DISCOVER_V1!', ('127.0.0.1', server.fixture['discoveryPort']))
             found = json.loads(udp.recv(4096))
             check(found['id'] == server.fixture['info']['id'] and found['port'] == server.port, 'UDP automatic discovery round trip')
         check(server.http('/command', {})[0] == 403, 'Unpaired command rejected')
